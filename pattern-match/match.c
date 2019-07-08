@@ -13,6 +13,7 @@ typedef int bool;
 #define SKIP(text, c) while((int)*text == c && *text != null) text++;
 #define SKIP_UNTIL(text, c) while((int)*text != c && (int)*text != null) text++;
 #define CLONE(a, b) a=calloc(strlen(b), sizeof(char)); for(char *p=b; *p != null; *(char *)(a + (p++ - b))=tolower(*p));
+#define COMPARE_WORD(a, b, equal) while (*a != null && *b != null && equal && *b != '?' && *b != '*' && *a == *b) { a++; b++; } equal=(*a == *b || *b == '?' || *b == '*');
 
 bool matches(char * text, char * pattern, bool ignoreCase) {
 	bool areEqual = true;
@@ -40,9 +41,9 @@ bool matches(char * text, char * pattern, bool ignoreCase) {
 		challenge = pattern;
 	}
 	
-	char next;
+	char * next;
 	do {
-		next = *(char *)(challenge + 1);
+		next = (char *)(challenge + 1);
 		switch( *challenge ) {
 			case '*':
 				/* Skip redundant characters */
@@ -51,14 +52,14 @@ bool matches(char * text, char * pattern, bool ignoreCase) {
 				break;
 			case '?':
 				while (*challenge == '?' && *current != null) {
-					if(anyChar && (next == null)) {
+					if(anyChar && (*next == null)) {
 						SKIP_UNTIL(current, null);
 						current--;
 						anyChar = false;
 					}
 					challenge++;
 					current++;
-					next = *(char *)(challenge + 1);
+					next = (char *)(challenge + 1);
 				}
 				areEqual = ((*current == null && *challenge == null) ||
 							(*current != null && *challenge != null));
@@ -66,18 +67,38 @@ bool matches(char * text, char * pattern, bool ignoreCase) {
 			default:
 				if (anyChar) {
 					/* Is it the last character? */
-					if (next == null) {
+					if (*next == null) {
 						SKIP_UNTIL(current, null);
 						current--;
 					} else {
+						/* Find a potential matching word */
 						SKIP_UNTIL(current, *challenge);
 					}
-					anyChar = false;
 				}
-				areEqual = (*current != null && *current == *challenge);
+				/* Compare the whole word */
+				COMPARE_WORD(current, challenge, areEqual);
 				if (areEqual) {
-					challenge++;
-					current++;
+					/* The next char is a * or ? or we finished */
+					anyChar = false;
+				} else {
+					if (anyChar) {
+						/* 
+						* If the previous challenge char was an asterisk,
+						* then we found a similar word, but not the exact one 
+						* that we were looking for.
+						*/
+						int wordSize = challenge - (next - 1);
+						/* Rewind + 1 and keep searching if there's text left. */
+						if (wordSize > 0) {
+							current = (char *)(current - wordSize + 1);
+							challenge = (next - 1);
+							if (*current == null) {
+								anyChar = false;
+							} else {
+								areEqual = true;
+							}
+						}
+					}
 				}
 				break;
 		}
@@ -170,36 +191,56 @@ long timer_end(struct timespec start_time){
 						(result) ? "match" : "differ", \
 						(matches(a, b, ignoreCase) == result) ? "OK" : "FAIL");
 
+/*
+#define EXPECT(a, b, ignoreCase, result) \
+	printf("Testing '%s' against '%s' pattern %s, expecting it to %s: %s\n", a, b, \
+						(ignoreCase) ? "(Case insensitive)" : "(Case sensitive)", \
+						(result) ? "match" : "differ", \
+						(strmatch(a, b, strlen(a), strlen(b)) == result) ? "OK" : "FAIL");
+ */
 
 int main(int argc, char * argv[]) {
-	char * text = "Endless fortune.";
+	char * text = "Endless fortune text.[2019].[2AC03F11]_tune.";
 
-	EXPECT(text, "*ort*", false, true);
+	EXPECT(text, text, false, true);
+	EXPECT(text, text, true, true);
+	EXPECT(text, "asdf", false, false);
+	EXPECT(text, "asdf", false, false);
+	EXPECT(text, "\0", false, false);
+	EXPECT("\0", "\0", false, true);
+	EXPECT("\0", "*", false, true);
+	
 	EXPECT(text, "End*tune.", false, true);
+	EXPECT(text, "*ort*", false, true);
 	EXPECT(text, "E*", false, true);
 	EXPECT(text, "*.", false, true);
+	EXPECT(text, "*[2AC*", false, true);
+	EXPECT(text, "****", false, true);
+	EXPECT(text, "*z", false, false);
+	EXPECT(text, "e*", false, false);
+	EXPECT(text, "e*", true, true);
+	EXPECT(text, "*ORT*", true, true);
+
 	EXPECT(text, "*?*", false, true);
+	EXPECT(text, "*? *", false, true);
+	EXPECT(text, "* *", false, true);
+	EXPECT(text, "*  *", false, false);
+	EXPECT(text, "*u*", false, true);
+	EXPECT(text, "*uu*", false, false);
+	EXPECT(text, "*s? *", false, true);
+	EXPECT(text, "*z? *", false, false);
 	EXPECT(text, "?*", false, true);
 	EXPECT(text, "*?", false, true);
 	EXPECT(text, "End??****??", false, true);
 	EXPECT(text, "End??****?.", false, true);
 	EXPECT(text, "?*?*?tune.", false, true);
-	EXPECT(text, "Endless fortune?", false, true);
-	EXPECT(text, "????????????????", false, true);
-	EXPECT(text, "??????????????????????", false, false);
+	EXPECT(text, "Endless fortune*?.", false, true);
+	EXPECT(text, "????????*????????", false, true);
 	EXPECT(text, "????", false, false);
-	EXPECT(text, text, false, true);
-	EXPECT(text, "****", false, true);
-	EXPECT(text, "e*", false, false);
-	EXPECT(text, "e*", true, true);
-	EXPECT(text, "*ORT*", true, true);
-	EXPECT(text, "*z", false, false);
-	EXPECT(text, "\0", false, false);
-	EXPECT("\0", "\0", false, true);
-	EXPECT("\0", "*", false, true);
-
+	
 	char * longText = "This is a quite long string that needs to be checked against a proper pattern expression.";
-	char * longPattern = "T**?* ???? * need*?*prop*tt*? p*?";
+	char * longPattern = "T*?* ???? * *ed*?*prop*tt*? p*?";
+
 	struct timespec start = timer_start();
 	matches(longText, longPattern, false);
 	long elapsed = timer_end(start);
