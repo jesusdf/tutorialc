@@ -1,5 +1,8 @@
 #include <stdio.h>
 
+#define PI 3.141592
+
+
 /*
 	Notas previas
 	-------------
@@ -113,10 +116,50 @@ void arquitectura(void) {
 	TipoDeValorDevuelto NombreFuncion(TipoParametro NombreParametro1, TipoParametro NombreParametro2)
 
 */
-int main (int argc, char *argv[])
+
+int suma(int numeroA, int numeroB) {
+    return numeroA + numeroB;
+}
+
+int ElevarA2(int y) {
+    return y * y;
+}
+
+void Saluda(void) {
+    printf("Hola!\n");
+}
+
+int main(void)
 {
-	printf ("Hello world!\n");
+/*
+    Saluda();
+
+    int a;
+	int y = 3;
+	int x = ElevarA2(y);
+
+	printf("x vale %d e y vale %d. a vale %d.\n", x, y, a);
+*/
+
+    int numeros[10] = { 1, 3, 5, 7, 9 };
+
+	//char letras[] = "Hola";
+	char letras[50] = { 'H', 'o', 'l', 'a', '\0' };
+	//letra = letra + 0x20;
+
+	letras[3] = 'e';
+	letras[3] = 98;
+	letras[4] = 0;
+
+	char * c = &letras[0];
+
+	*c='B';
+
+	for(int i=0; i<=4; i = i + 1) {
+        numeros[i] = numeros[i] + 0x30;
+    }
+
+    printf ("Hola, esta es la letra que pedías: %s %s %d %ls\n", letras, c, numeros[2], numeros);
 
 	return 0;
 }
-
