@@ -1,7 +1,8 @@
 #include <stdio.h>
 
 #define PI 3.141592
-
+#define FALSE 0
+#define TRUE !FALSE
 
 /*
 	Notas previas
@@ -129,17 +130,9 @@ void Saluda(void) {
     printf("Hola!\n");
 }
 
-int main(void)
-{
 /*
-    Saluda();
 
-    int a;
-	int y = 3;
-	int x = ElevarA2(y);
-
-	printf("x vale %d e y vale %d. a vale %d.\n", x, y, a);
-*/
+void StringTest(void) {
 
     int numeros[10] = { 1, 3, 5, 7, 9 };
 
@@ -160,6 +153,146 @@ int main(void)
     }
 
     printf ("Hola, esta es la letra que pedías: %s %s %d %ls\n", letras, c, numeros[2], numeros);
+}
 
+*/
+
+
+/*
+
+Ejemplo con pseudocodigo:
+
+subproceso funcion bizzbuzz
+para (i = 1; mientras i<=100; establece i = i + 1) {
+    establecer print_number a verdadero;
+    Si i es divisible por 3
+        escribir "Bizz";
+        establecer print_number a falso;
+    Si i es divisible por 5
+        escribir "Buzz";
+        establecer print_number a falso;
+    Si print_number es verdadero, escribir i;
+    escribir una nueva línea;
+}
+
+*/
+
+/*
+void bizzbuzz(void){
+    int i=0;
+    int print_number=FALSE;
+
+    for(i=1; i<=100; i++){
+        print_number = TRUE;
+        if(i % 3 == 0) {
+            printf("Bizz");
+            print_number=FALSE;
+        } else {
+            if(i % 5 == 0) {
+                printf("Buzz");
+                print_number=FALSE;
+            }
+        }
+        if(print_number == TRUE) {
+            printf("%d", i);
+        }
+        printf("\n");
+    }
+}
+*/
+
+/*
+
+funcion calculadora {
+    muestra mensaje "Calculadora v0.01";
+    haz
+        haz
+            muestra mensaje "Indica la operación a realizar (+-*\): ";
+            leer operacion;
+        mientras operacion no sea '+' '-' '*' '/'
+        muestra mensaje "Introduce un numero:"
+        leer numero;
+        muestra mensaje "Introduce otro numero:"
+        leer numero2;
+        si operacion es '/' y numero2 es 0
+            mostrar mensaje "No se puede dividir entre 0!"
+        sino
+            dependiendo del valor de operacion:
+                si es '+':
+                    muestra numero + numero2;
+                si es '-':
+                    muestra numero - numero2;
+                si es '*':
+                    muestra numero * numero2;
+                si es '/':
+                    muestra numero / numero2;
+                sino:
+                    muestra mensaje "La operación no es válida";
+        muestra mensaje "¿Deseas hacer otro cálculo? (s/n)";
+        leer continuar;
+    mientras continuar = 's';
+
+}
+
+*/
+
+void calculadora(void) {
+    int numero = 0;
+    int numero2 = 0;
+    char operacion = '\0';
+    char continuar = 'n';
+
+    printf("Calculadora v0.01\n");
+
+    do {
+
+        printf("\nIndica la operación a realizar (+-*/): ");
+        do {
+            scanf(" %c", &operacion);
+        } while(operacion != '+' && operacion != '-' && operacion != '*' && operacion != '/');
+
+        printf("\nIntroduce un numero: ");
+        scanf("%d", &numero);
+        printf("\nIntroduce otro numero: ");
+        scanf("%d", &numero2);
+
+        if((operacion == '/') && (numero2 == 0) ) {
+            printf("\nNo se puede dividir entre 0!\n");
+        }
+        else
+        {
+            printf("\nResultado: ");
+            switch(operacion) {
+                case '+':
+                    printf("%d", numero + numero2);
+                    break;
+                case '-':
+                    printf("%d", numero - numero2);
+                    break;
+                case '*':
+                    printf("%d", numero * numero2);
+                    break;
+                case '/':
+                    //printf("%f", (double)numero / (double)numero2);
+                    printf("%d", numero / numero2);
+                    break;
+                default:
+                    printf("\nLa operación no es válida\n");
+                    break;
+            }
+        }
+        
+        printf("\n");
+
+        printf("\n¿Deseas hacer otro cálculo? (s/n) ");
+        scanf(" %c", &continuar);
+
+    } while(continuar == 's' || continuar == 'S');
+
+}
+
+int main(void)
+{
+    calculadora();
 	return 0;
 }
