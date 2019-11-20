@@ -12,7 +12,11 @@
 #define true !false
 #define LINE_MAX_LENGTH 81
 
-#define Clear() printf("\033[H\033[J")
+#ifdef _WIN32
+  #define Clear() system("cls")
+#else
+  #define Clear() printf("\033[H\033[J")
+#endif
 
 int ReadNumber () {
   char *end;
