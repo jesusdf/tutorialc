@@ -10,12 +10,12 @@ char title[] =
 ";
 char choice[] = "Seleccione una opcion";
 
-char menu[2][LINE_MAX_LENGTH] = {
+char menu[][LINE_MAX_LENGTH] = {
   "Decir hola",
   "Decir adios"
 };
 
-char messages[2][LINE_MAX_LENGTH] = {
+char messages[][LINE_MAX_LENGTH] = {
   "Hola.",
   "Adios."
 };
