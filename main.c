@@ -236,6 +236,8 @@ funcion calculadora {
 
 */
 
+
+
 void calculadora(void) {
     int numero = 0;
     int numero2 = 0;
@@ -291,8 +293,84 @@ void calculadora(void) {
 
 }
 
-int main(void)
-{
-    calculadora();
-	return 0;
+
+/*
+    funcion saludo1 
+        muestra mensaje "saludo1";
+        haz
+            haz
+                muestra mensaje "presiona un nuemero de 1 a 4";
+                leer operacion;
+                muestra mensaje "Introduce un numero:"
+                leer numero;
+        si el numero es 'n<4' 
+                mostrar mensaje "No existe!"
+            sino
+                dependiendo del valor del numero:
+                    si es '1':
+                        muestra hola guap@;
+                    si es '2':
+                        muestra adios guap@";
+                    si es '3':
+                        muestra que tal?;
+                    si es '4':
+                        muestra la familia?;
+                    sino:
+                        muestra mensaje "La operación no es válida";
+            muestra mensaje "¿Deseas seguir? (s/n)";
+            leer continuar;
+        mientras continuar = 's';
+
+
+*/
+int main(void) {
+     saludo1(); 
+
+return 0;
+}
+void saludo1 (void) {
+    int numero = 0;
+    
+    char continuar = 'n';
+
+
+    printf("saludo1");
+
+    do {
+        printf("\nIntroduce un numero: ");
+        scanf("%d", &numero);
+        
+        if( numero>4 ) {
+            printf("no existe");
+        }
+        else
+        {
+            printf("saludo: ");
+            switch(numero) {
+                case 1:
+                    printf("\nhola guap@");
+                    break;
+                case 2:
+                    printf("\nadios guap@");
+                    break;
+                case 3:
+                    printf("\nque tal?");
+                    break;
+                case 4:
+                
+                    printf("\nla familia");
+                    break;
+                default:
+                    printf("\nLa operación no es válida\n");
+                    break;
+            }
+        }
+        
+        printf("\n");
+
+        printf("\n¿Deseas seguir? (s/n) ");
+        scanf(" %c", &continuar);
+
+    } while(continuar == 's' || continuar == 'S');
+
 }
