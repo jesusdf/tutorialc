@@ -19,7 +19,7 @@ int CreateMenu (char *title, char *choice, char menu[][LINE_MAX_LENGTH], int siz
     printf ("\t%d) Exit\n", count + 1);
 
     do {
-      printf ("\n%s: ", choice);
+      printf ("\n%s ", choice);
       option = ReadNumber ();
     } while (option < 1 || option > count + 1);
 
