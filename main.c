@@ -374,3 +374,10 @@ void saludo1 (void) {
     } while(continuar == 's' || continuar == 'S');
 
 }
+
+
+//
+// Aquí voy a empezar a poner cosas que voy viendo en los tutoriales.
+//
+
+
