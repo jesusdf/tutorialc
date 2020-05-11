@@ -278,7 +278,6 @@ system ("pause");
 return 0;
 
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 */
 // Ejercicio 2º:
         //realizar un programa que lea tres numeros enteros positivos distintos e imprima el mayor 
@@ -325,8 +324,8 @@ return 0;
 }
 
 */
-/*
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////
 // Condiciones Multiples y Ejercicio: 
 // hacer un programa que diga si un numero insertado por teclado se encuentra entre 1 o 10 o si no lo esta.
 
@@ -342,7 +341,7 @@ int main (){
     /*if (x >=1 && x <=10){ // && significa Y, o que las dos condiciones se tienen cumplir y entonces entra el programa.
     printf("el numero %i esta entre 1 y 10 .\n",x);
  }
-
+*/
 if (x >=1 || x <=10){ // || significa O,  conque  una de las dos condiciones se cumpla, entonces entra el programa.
     printf("el numero %i esta entre 1 y 10 .\n",x);
  }
@@ -356,134 +355,15 @@ if (x >=1 || x <=10){ // || significa O,  conque  una de las dos condiciones se 
 
 }
 
-*/
-/*
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Estructuras iterativas While y For
-// Escribe un programa que lea dos numeros y muestre por pantalla todos los numeros
-//comprendidos estre esos numeros dados.
-// existen varios tipos de bucles while y for.
-
-#include <stdio.h> 
-
-int main () {
-
-int x, y, i; // i equivale a un contador, puede ser j, k, etc.
-
-    printf("introducir un numero");
-    scanf ("%i", &x);
-    printf("intruduce un numero mayor que el anterior:");
-    scanf("%i", &y);
-//bucle For.
-// este tiene varias partes:
-                   // inicializar el contador: i=x + 1
-                   // la condicion: i<y
-                   // el incremento: i++
-    for(i=x + 1 ; i<y ; i++){
-            printf ("%i, ", i);
-    }
-printf("\n");
-// blucle while:
-// este solo lleva 1 condicion.
-i=x+1;
-while (i<y){
-    printf("%i, ",i);
-    i++;
-}
-printf("\n");
-
-system ("pause");
-return 0;
-
-}
-*/
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Ejercicio For y while
-//Realiza un programa que imprima la suma de los nmeros pares entre dos y mil.
-// for
-/*
-#include <stdio.h>
-int main(){
-    int i;
-    float suma;
-    suma= 0;
-
-    for (i = 2 ; i  <= 2000 ; i += 2){
-        suma += 1;
-    }
-
-printf("el resultado de la suma es : %f.\n", suma);
-
-system ("pause");
-return 0;
-}
-
-// while
-#include <stdio.h>
-int main(){
-
-int x, y, i;
-float suma;
-
-printf("intruduce de cuantos numeros quieres calcular la media: ");
-scanf("%i",&x);
-    i=0;
-    suma = 0;
-
-    while (i < x) {
-        printf(" intruduce el numero %i, ", i+1);
-        scanf ("%i", &y);
-        suma += y;
-        i++;
-    }
-    
-suma = suma / x;
-printf("el resultado de la media es: %f. \n", suma);
-
-system ("pause");
-return 0;
-}
-
-*/
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Bucles anidados y Ejercicio Cronometro.
-// Hacer tablas de multiplicar  del 1 al 9.
-// funcion sleep
-// if y else
-/*
-#include <stdio.h>
-
-int main()
-{
-    int i, j;                     // primero declaramos contadores
-    for(i=1;i<=9;i++){            // primero empieza en primer blucle
-         for(j=1;j<=10;j++){      // se ejecuta el segundo bucle dentro del primero hasta llegar a 10
-        
-             printf("%i x %i = %i.\n", i,j,i*j);
 
 
-         }// cuando termine el segundo bucle vuelve al primero y se repite.   
-      printf("\n"); // o usar  
-      //system("pause");  
 
-    }
 
-system ("pause");
-return 0;
 
-}
-*/
-// hacer un cronometro que consiste cuando se pulse la tecla espacio.
-#include <stdio.h>
-#include <windows.h> // para la funcion sleep.
 
-int main()
-{
-   
-system ("pause");
-return 0;
 
-}
+
+
 
 
 
