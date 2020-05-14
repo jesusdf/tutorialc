@@ -8,7 +8,7 @@
 int InitializeSDL() {
   int result = 0;
   result = SDL_Init(SDL_INIT_VIDEO);
-  if (InitializeSDL >= 0) {
+  if (result >= 0) {
     result = TTF_Init();
   }
   return result;
