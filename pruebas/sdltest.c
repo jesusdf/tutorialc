@@ -131,30 +131,48 @@ int Render(SDL_Window *window, int mouse_x, int mouse_y)
   int previous_line_height = 0;
   int line_height = 0;
   int selected = 0;
-  selected_index = -1;
+  int i = 0;
+  int mouse_detect = 0;
+
+  mouse_detect = (mouse_x || mouse_y);
 
   SetBackgroundColor(window, 0x80, 0x80, 0x80);
 
   /* Mido la altura del texto, compruebo si el ratón está encima y lo pinto */
   line_height = CalculateTextHeight(window, texto1, FONT_SIZE, MARGIN);
-  selected = IsMouseOver(mouse_x, mouse_y, MARGIN, MARGIN, SCREEN_WIDTH - (MARGIN * 2), line_height);
+  if (mouse_detect)
+  {
+    selected = IsMouseOver(mouse_x, mouse_y, MARGIN, MARGIN, SCREEN_WIDTH - (MARGIN * 2), line_height);
+  }
+  else
+  {
+    selected = (selected_index == i);
+  }
   PrintText(window, texto1, FONT_SIZE, selected, MARGIN, MARGIN, 0xFF, 0xFF, 0xFF);  
 
-  if (selected)
+  if (mouse_detect && selected)
   {
-    selected_index = 0;
+    selected_index = i;
   }
 
   previous_line_height = line_height;
+  i++;
   
   /* Mido la altura del texto, compruebo si el ratón está encima y lo pinto */
-  line_height = CalculateTextHeight(window, texto2, FONT_SIZE, MARGIN); 
-  selected = IsMouseOver(mouse_x, mouse_y, MARGIN, (MARGIN * 2) + previous_line_height, SCREEN_WIDTH - (MARGIN * 2), line_height);
+  line_height = CalculateTextHeight(window, texto2, FONT_SIZE, MARGIN);
+  if (mouse_detect)
+  {
+    selected = IsMouseOver(mouse_x, mouse_y, MARGIN, (MARGIN * 2) + previous_line_height, SCREEN_WIDTH - (MARGIN * 2), line_height);
+  }
+  else
+  {
+    selected = (selected_index == i);
+  }
   PrintText(window, texto2, FONT_SIZE, selected, MARGIN, (MARGIN * 2) + previous_line_height, 0xFF, 0xFF, 0xFF);
   
-  if (selected)
+  if (mouse_detect && selected)
   {
-    selected_index = 1;
+    selected_index = i;
   }
 
   return 0;
@@ -175,6 +193,43 @@ void OptionSelected() {
     }
     SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_INFORMATION, "Has seleccionado", msg, NULL );
   }
+}
+
+int HandleKeypress(SDL_Window *window, SDL_Keycode key)
+{
+  int render = 0;
+  int select = 0;
+  switch(key)
+  {
+    case SDLK_UP:
+      if (selected_index > 0) 
+      {
+        selected_index--;
+        render++;
+      }
+    break;
+    case SDLK_DOWN:
+      if (selected_index < 1) 
+      {
+        selected_index++;
+        render++;
+      }
+    break;
+    case SDLK_RETURN:
+    case SDLK_RETURN2:
+      render++;
+      select++;
+      break;
+  }
+  if (render)
+  {
+    Render(window, 0, 0);
+  }
+  if (select)
+  {
+    OptionSelected();
+  }
+  return render;
 }
 
 int main(int argc, char *argv[])
@@ -217,6 +272,12 @@ int main(int argc, char *argv[])
             break;
           case SDL_MOUSEBUTTONUP:
             OptionSelected();
+            break;
+          case SDL_KEYUP:
+            if (HandleKeypress(window, event.key.keysym.sym))
+            {
+              SDL_UpdateWindowSurface(window);
+            }
             break;
           default:
             SDL_UpdateWindowSurface(window);
