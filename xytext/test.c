@@ -22,7 +22,7 @@ char messages[][LINE_MAX_LENGTH] = {
 
 int Menu_Handler (int option)
 {
-  printf ("%s\n", messages[option]);
+  WriteLine (messages[option]);
   return 0;
 }
 

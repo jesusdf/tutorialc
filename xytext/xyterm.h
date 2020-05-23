@@ -30,6 +30,11 @@ int ReadNumber () {
   }
 }
 
+void WriteLine(char *text)
+{
+  printf ("%s\n", text);
+}
+
 void Pause() {
   fgetc(stdin);
 }
