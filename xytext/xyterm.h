@@ -30,6 +30,11 @@ int ReadNumber () {
   }
 }
 
+void Write(char *text)
+{
+  printf ("%s", text);
+}
+
 void WriteLine(char *text)
 {
   printf ("%s\n", text);

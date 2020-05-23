@@ -8,7 +8,7 @@ char title[] =
 -- Menu generico 1.0 --\n\
 -----------------------\
 ";
-char choice[] = "Seleccione una opcion";
+char choice[] = "Seleccione una opcion:";
 
 char menu[][LINE_MAX_LENGTH] = {
   "Decir hola",

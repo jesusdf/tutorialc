@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "xytext/xytext.h"
 
@@ -24,10 +25,17 @@ int Fibonacci(int numero) {
 }
 
 void CalcularFibonacci (int numero) {
+  char msg[1000]="";
+  char parcial[100]="";
+  int len = 0;
   for (int i = 0; i < numero; i++) {
-    printf("%d ", Fibonacci(i));
+    len = snprintf(parcial, sizeof(parcial), "%d ", Fibonacci(i));
+    if (len > 0)
+    {
+      strncat(msg, parcial, sizeof(msg));
+    }
   }
-  printf("\n");
+  WriteLine (msg);
 }
 
 int CalcularFactorial(int numero) {
@@ -40,16 +48,18 @@ int CalcularFactorial(int numero) {
 
 int Menu_Handler (int option)
 {
-  printf ("Indica un numero: ");
+  Write ("Indica un numero: ");
   int numero = ReadNumber ();
   int resultado = 0;
+  char msg[1000] = "";
   switch(option) {
     case 0: /* Fibonacci */
       CalcularFibonacci(numero);
       break;
     case 1: /* Factorial */
       resultado = CalcularFactorial(numero);
-      printf ("Resultado: %d\n", resultado);
+      snprintf (msg, sizeof(msg), "Resultado: %d\n", resultado);
+      WriteLine (msg);
       break;
   }
   return 0;
