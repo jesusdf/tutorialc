@@ -29,13 +29,13 @@ int Render(SDL_Window *window, int mouse_x, int mouse_y, char *title, char *choi
 
   y += line_height + MARGIN;
 
-line_height = CalculateTextHeight(window, choice, FONT_SIZE, MARGIN); 
+  line_height = CalculateTextHeight(window, choice, FONT_SIZE, MARGIN); 
   PrintText(window, choice, FONT_SIZE, 0, MARGIN, y, 0xFF, 0xFF, 0xFF);  
 
 
   do
   {
-    y += line_height;
+    y += line_height + MARGIN;
 
     snprintf (menu_entry, sizeof(menu_entry), "%d) %s", i + 1, menu[i]);
 
@@ -43,13 +43,13 @@ line_height = CalculateTextHeight(window, choice, FONT_SIZE, MARGIN);
     line_height = CalculateTextHeight(window, menu_entry, FONT_SIZE, MARGIN);
     if (mouse_detect)
     {
-      selected = IsMouseOver(mouse_x, mouse_y, MARGIN, (MARGIN * (i + 1)) + y, SCREEN_WIDTH - (MARGIN * 2), line_height);
+      selected = IsMouseOver(mouse_x, mouse_y, MARGIN, y, SCREEN_WIDTH - (MARGIN * 2), line_height);
     }
     else
     {
       selected = (selected_index == i);
     }
-    PrintText(window, menu_entry, FONT_SIZE, selected, MARGIN, (MARGIN * (i + 1)) + y, 0xFF, 0xFF, 0xFF);
+    PrintText(window, menu_entry, FONT_SIZE, selected, MARGIN, y, 0xFF, 0xFF, 0xFF);
     
     if (mouse_detect && selected)
     {
@@ -58,7 +58,7 @@ line_height = CalculateTextHeight(window, choice, FONT_SIZE, MARGIN);
   }
   while (++i < count);
 
-  y += line_height;
+  y += line_height + MARGIN;
 
   SDL_UpdateWindowSurface(window);
 
@@ -93,7 +93,7 @@ void HandleKeypress(SDL_Keycode key, int count, int *quit, int *render, int *sel
       }
     break;
     case SDLK_DOWN: /* Tecla flecha abajo */
-      if (selected_index < count) 
+      if (selected_index < (count - 1)) 
       {
         selected_index++;
         *render = 1;
@@ -186,8 +186,10 @@ int CreateMenu (char *title, char *choice, char menu[][LINE_MAX_LENGTH], int siz
 
 void WriteLine(char *text)
 {
-  int line_height = CalculateTextHeight(current_window, text, FONT_SIZE, MARGIN); 
-  PrintText(current_window, text, FONT_SIZE, 0, MARGIN, SCREEN_HEIGHT - (line_height + MARGIN), 0xFF, 0xFF, 0xFF);  
+  int line_height = CalculateTextHeight(current_window, text, FONT_SIZE, MARGIN);
+  /* int position = SCREEN_HEIGHT - (line_height + MARGIN); */
+  int position = current_y;
+  PrintText(current_window, text, FONT_SIZE, 0, MARGIN, position, 0xFF, 0xFF, 0xFF);  
 
   current_y += line_height;
 
