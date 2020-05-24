@@ -116,29 +116,42 @@ int CreateMenu (char *title, char *choice, char menu[][LINE_MAX_LENGTH], int siz
   const int count = (size / LINE_MAX_LENGTH) + 1;
   char extended_menu[count][LINE_MAX_LENGTH];
   SDL_Window *window = NULL;
+  int initialized = 0;
   int quit = 0;
   int render;
   int select;
   SDL_Event event;
 
-  if (InitializeSDL() < 0) {
-    fprintf(stderr, "could not initialize sdl2: %s\n", SDL_GetError());
-    return 1;
-  }
+  selected_index = -1;
 
-  window = SDL_CreateWindow(
-			    "SDLText Menu",
-			    SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-			    SCREEN_WIDTH, SCREEN_HEIGHT,
-			    SDL_WINDOW_SHOWN
-			    );
-  
-  if (window == NULL) {
-    fprintf(stderr, "could not create window: %s\n", SDL_GetError());
-    return 1;
-  }
+  if(current_window == NULL)
+  {
+    if (InitializeSDL() < 0) {
+      fprintf(stderr, "could not initialize sdl2: %s\n", SDL_GetError());
+      return 1;
+    }
 
-  current_window = window;
+    window = SDL_CreateWindow(
+            "SDLText Menu",
+            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+            SCREEN_WIDTH, SCREEN_HEIGHT,
+            SDL_WINDOW_SHOWN
+            );
+    
+    if (window == NULL) {
+      fprintf(stderr, "could not create window: %s\n", SDL_GetError());
+      return 1;
+    }
+
+    current_window = window;
+
+    initialized = 1;
+
+  }
+  else
+  {
+    window = current_window;
+  }
 
   /* Copio el menú y le añado la opción de salir */
   memcpy((char *)extended_menu, (char *)menu, count * LINE_MAX_LENGTH);
@@ -176,9 +189,18 @@ int CreateMenu (char *title, char *choice, char menu[][LINE_MAX_LENGTH], int siz
             break;
       }
   }
-    
-  SDL_DestroyWindow(window);
-  SDL_Quit();
+  
+  selected_index = -1;
+
+  if (initialized)
+  {
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+  }
+  else
+  {
+    RefreshWindow();
+  }
 
   return 0;
 

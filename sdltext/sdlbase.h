@@ -78,7 +78,7 @@ int CalculateTextHeight(SDL_Window *window, char *text, int font_size, int x)
   SDL_Color color = {0, 0, 0};
   SDL_Surface *text_surface;
   int available_width = SCREEN_WIDTH - (x + MARGIN);
-  text_surface = TTF_RenderText_Blended_Wrapped(font, text, color, available_width);
+  text_surface = TTF_RenderUTF8_Blended_Wrapped(font, text, color, available_width);
 
   return text_surface->h;
 }
@@ -93,7 +93,7 @@ int PrintText(SDL_Window *window, char* text, int font_size, int selected, int x
   SDL_Surface *text_surface;
   int available_width = SCREEN_WIDTH - (x + MARGIN);
 
-  text_surface = TTF_RenderText_Blended_Wrapped(font, text, color, available_width);
+  text_surface = TTF_RenderUTF8_Blended_Wrapped(font, text, color, available_width);
   if (text_surface != NULL)
   {
       width = text_surface->w;
@@ -108,7 +108,7 @@ int PrintText(SDL_Window *window, char* text, int font_size, int selected, int x
       else 
       {
         SDL_Color inverted_color = {0xFF - r, 0xFF - g,  0xFF - b};
-        SDL_Surface *inverted_text_surface = TTF_RenderText_Blended_Wrapped(font, text, inverted_color, available_width);
+        SDL_Surface *inverted_text_surface = TTF_RenderUTF8_Blended_Wrapped(font, text, inverted_color, available_width);
         BlitSelectedText(text_surface, inverted_text_surface, screen, &position);
       }
       SDL_FreeSurface(text_surface);
@@ -126,6 +126,15 @@ int IsMouseOver(int mouse_x, int mouse_y, int x, int y, int w, int h)
   /* Devolvemos si la posición del ratón se solapa sobre el rectángulo */
   return (!(mouse_x < x || mouse_x > (x + w)) &&
           !(mouse_y < y || mouse_y > (y + h)));
+}
+
+int RefreshWindow()
+{
+  SDL_Event event;
+  event.type = SDL_MOUSEMOTION;
+  event.motion.x = 0;
+  event.motion.y = 0;
+  SDL_PushEvent(&event);
 }
 
 

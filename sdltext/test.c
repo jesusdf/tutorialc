@@ -15,14 +15,34 @@ char menu[][LINE_MAX_LENGTH] = {
   "Decir adios"
 };
 
-char messages[][LINE_MAX_LENGTH] = {
-  "Hola.",
-  "Adios."
+char submenu[][LINE_MAX_LENGTH] = {
+  "En Español",
+  "En Inglés",
+  "En Alemán"
 };
 
-int Menu_Handler (int option)
+char messages[][LINE_MAX_LENGTH] = {
+  "Hola.",
+  "Adios.",
+  "Hello.",
+  "Goodbye.",
+  "Hallo.",
+  "Auf Wiedersehen."
+};
+
+int numero_saludos = (sizeof(menu) / LINE_MAX_LENGTH);
+int saludo = 0;
+
+int Submenu_Handler (int idioma)
 {
-  WriteLine (messages[option]);
+  WriteLine (messages[(numero_saludos * idioma) + saludo]);
+  return 0;
+}
+
+int Menu_Handler (int eleccion)
+{
+  saludo = eleccion;
+  CreateMenu (title, choice, submenu, sizeof(submenu), &Submenu_Handler);
   return 0;
 }
 
