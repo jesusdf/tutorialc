@@ -179,7 +179,7 @@ int Render(SDL_Window *window, int mouse_x, int mouse_y)
 
 }
 
-void OptionSelected() {
+int OptionSelected() {
   if ( selected_index >= 0 ) {
     char *msg;
     switch(selected_index)
@@ -192,10 +192,12 @@ void OptionSelected() {
         break;
     }
     SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_INFORMATION, "Has seleccionado", msg, NULL );
+    return 1;
   }
+  return 0;
 }
 
-int HandleKeypress(SDL_Window *window, SDL_Keycode key)
+int HandleKeypress(SDL_Window *window, SDL_Keycode key, int *quit)
 {
   int render = 0;
   int select = 0;
@@ -220,6 +222,9 @@ int HandleKeypress(SDL_Window *window, SDL_Keycode key)
       render++;
       select++;
       break;
+    case SDLK_ESCAPE:
+      *quit = 1;
+      break;
   }
   if (render)
   {
@@ -227,7 +232,7 @@ int HandleKeypress(SDL_Window *window, SDL_Keycode key)
   }
   if (select)
   {
-    OptionSelected();
+    *quit = OptionSelected();
   }
   return render;
 }
@@ -271,10 +276,10 @@ int main(int argc, char *argv[])
             SDL_UpdateWindowSurface(window);
             break;
           case SDL_MOUSEBUTTONUP:
-            OptionSelected();
+            quit = OptionSelected(window);
             break;
           case SDL_KEYUP:
-            if (HandleKeypress(window, event.key.keysym.sym))
+            if (HandleKeypress(window, event.key.keysym.sym, &quit))
             {
               SDL_UpdateWindowSurface(window);
             }
