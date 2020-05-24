@@ -206,16 +206,82 @@ int CreateMenu (char *title, char *choice, char menu[][LINE_MAX_LENGTH], int siz
 
 }
 
+void Write(char *text)
+{
+  int line_height = CalculateTextHeight(current_window, text, FONT_SIZE, MARGIN);
+  /* int position = SCREEN_HEIGHT - (line_height + MARGIN); */
+  int position = current_y;
+  DrawRectangle(current_window, MARGIN - 1, position - 1, SCREEN_WIDTH, line_height + 2,  0x80, 0x80, 0x80);
+  PrintText(current_window, text, FONT_SIZE, 0, MARGIN, position, 0xFF, 0xFF, 0xFF);  
+
+  SDL_UpdateWindowSurface(current_window);
+}
+
 void WriteLine(char *text)
 {
   int line_height = CalculateTextHeight(current_window, text, FONT_SIZE, MARGIN);
   /* int position = SCREEN_HEIGHT - (line_height + MARGIN); */
   int position = current_y;
+  DrawRectangle(current_window, MARGIN - 1, position - 1, SCREEN_WIDTH, line_height + 2,  0x80, 0x80, 0x80);
   PrintText(current_window, text, FONT_SIZE, 0, MARGIN, position, 0xFF, 0xFF, 0xFF);  
 
   current_y += line_height;
 
   SDL_UpdateWindowSurface(current_window);
+}
+
+int ReadNumber () {
+  
+  char text[10];
+  int done = 0;
+  int textlen = 0;
+  SDL_Event event;
+  
+  while (!done) {
+      /* Check for events */
+      while (SDL_PollEvent(&event)) {
+          switch(event.type) {
+              case SDL_KEYDOWN:
+                  switch (event.key.keysym.sym)
+                  {
+                      case SDLK_ESCAPE:
+                      case SDLK_RETURN:
+                      case SDLK_RETURN2:
+                          done = 1;
+                          Write(text);
+                          break;
+                      case SDLK_BACKSPACE:
+                          textlen=SDL_strlen(text);
+                          if (textlen == 0)
+                          {
+                              break;
+                          }
+                          text[textlen-1]=0x00;
+                          Write(text);
+                          break;
+                    }
+              break;
+              case SDL_TEXTINPUT:
+                  if (SDL_strlen(event.text.text) == 0 || event.text.text[0] == '\n')
+                      break;
+
+                  if (SDL_strlen(text) + SDL_strlen(event.text.text) < sizeof(text))
+                      SDL_strlcat(text, event.text.text, sizeof(text));
+
+                  Write(text);
+              
+              break;
+          }
+          SDL_FlushEvent(event.type);
+      }
+  }
+
+  char *end;
+  int res = strtol (text, &end, 10);
+  if (res < 0) {
+    res = 0;
+  }
+  return res;
 }
 
 #endif

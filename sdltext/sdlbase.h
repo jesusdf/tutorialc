@@ -137,5 +137,4 @@ int RefreshWindow()
   SDL_PushEvent(&event);
 }
 
-
 #endif

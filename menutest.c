@@ -1,15 +1,21 @@
 #include <stdio.h>
 #include <string.h>
 
+#define USE_SDL 1
+
+#ifdef USE_SDL
+#include "sdltext/sdltext.h"
+#else
 #include "xytext/xytext.h"
+#endif
 
 char title[] =
 "\
------------------\n\
--- Agenda v1.0 --\n\
------------------\
+----------------------\n\
+-- Matemáticas v1.0 --\n\
+----------------------\
 ";
-char choice[] = ">";
+char choice[] = "Seleccione una opción:";
 
 char menu[][LINE_MAX_LENGTH] = {
   "Calcular fibonacci",
